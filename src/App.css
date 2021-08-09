@@ -1,0 +1,25 @@
+.app {
+  width: 100vw;
+  height: 100vh;
+}
+
+.photo-timeline {
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  margin: 0 auto
+}
+
+.photo-timeline-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem
+}
+
+.photo-timeline-img {
+  margin-bottom: 1rem;
+}
+
+.photo-timeline-title {
+  font-size: 1rem;
+}
