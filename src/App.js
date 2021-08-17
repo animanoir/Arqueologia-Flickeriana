@@ -3,22 +3,30 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import Moment from 'react-moment'
 import moment from 'moment'
+import Select from 'react-select';
 import './App.css';
 
+
+const opcionesZonas = [
+  {value: 'querétaro%2Cqueretaro%2Cqro', label: 'Querétaro'},
+  {value: 'ciudaddeméxico%2Ccdmx%2C%2Cdistritofederal', label: 'Ciudad de México'},
+]
 
 function toTimestamp(strDate){
   var datum = Date.parse(strDate);
   return datum/1000;
  }
 
+// Suma tiempo al timestamp para llegar al final del mismo día
 function toMaxTakenDate(timeStamp){
   let dia = 86399
-  console.log('toMaxTakenDate'+timeStamp + dia)
   return timeStamp + dia
 }
 
 const App = () => {
   const [date, setDate] = useState(new Date());
+  const [zonaTags, setZonaTags] = useState(opcionesZonas[0].value)
+  const [zonaLabel, setZonaLabel] = useState(opcionesZonas[0].label)
   const [maxTakenDate, setMaxTakenDate] = useState(
     <Moment unix>{date}</Moment>
   )
@@ -26,49 +34,86 @@ const App = () => {
   const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-      console.log(`minTakenDate: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
+      console.log(`minTakenDate ${minTakenDate}: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate ${maxTakenDate}: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
       setPhotos([0])
-      setMaxTakenDate(toTimestamp(date))
-      fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=840642ee4589f9f9a3ad5572658073f7&tags=querétaro&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&page=1&format=json&nojsoncallback=1`)
+      fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=840642ee4589f9f9a3ad5572658073f7&tags=${zonaTags}&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&user_id=&page=1&format=json&nojsoncallback=1`)
       .then(function(response){
         return response.json();
       })
       .then(function(j){
-        // console.info(JSON.stringify(j));
         let picArray = j.photos.photo.map((pic, i) => {
           var srcPath = 'https://farm'+pic.farm+'.staticflickr.com/'+pic.server+'/'+pic.id+'_'+pic.secret+'.jpg';
           return(
             <div key={i} className='photo-timeline-item'>
-              <img className='photo-timeline-img' alt="dogs" src={srcPath} />
-              <small className='photo-timeline-title'>Título: {pic.title}</small>
+              <a href={`https://www.flickr.com/photos/${pic.owner}/${pic.id}`} target="_blank">
+                <img className='photo-timeline-img' alt="dogs" src={srcPath} />
+              </a>
+              <div className='info-foto-contenedor'>
+                <small className='photo-timeline-title'>
+                  {
+                    pic.title ? pic.title : ''
+                  }
+                </small>
+              </div>
             </div>
           )
         })
         setPhotos(picArray)
       })
 
-    }, [date])
+    }, [date, zonaTags])
 
     return (
       <div className="App">
-      <div>
-        <Calendar
-            className='calendario'
-            maxDate={new Date()}
-            onChange={
-              date => {
-                setDate(date);
-                console.log('fecha seleccionada: '+date);
-                setMinTakenDate(toTimestamp(date));
-                setMaxTakenDate(toMaxTakenDate(toTimestamp(date)));
-                <Moment format="YYYY/MM/DD HH:mm:ss">{date}</Moment>
+        <div className='sidebar-izq'>
+          <Calendar
+              locale={'es-MX'}
+              minDate={new Date(2004, 1, 10)}
+              maxDate={new Date()}
+              onChange={
+                date => {
+                  setDate(date);
+                  console.log('fecha seleccionada: '+date);
+                  setMinTakenDate(toTimestamp(date));
+                  setMaxTakenDate(toMaxTakenDate(toTimestamp(date)));
+                  <Moment format="YYYY/MM/DD HH:mm:ss">{date}</Moment>
+                }
               }
-            }
-            value={date}
-          />
+              value={date}
+            />
+            <div>
+              <h1 className='titulo'>Arqueología Flickeriana:
+              </h1>
+              <h2 className='texto-zona'>{zonaLabel}</h2>
+            </div>
+            <div>
+              <Select
+                options={opcionesZonas}
+                onChange={
+                  value => {
+                    setZonaTags(value.value)
+                    setZonaLabel(value.label)
+                  }
+                }
+              />
+            </div>
         </div>
         <div className='photo-timeline'>
-            {photos}
+          {photos}
+        </div>
+        <div className='sidebar-der'>
+          <p>
+            La información digital muere si es olvidada. Tras la creación de redes sociales que fomentan
+            la rapidez y superficialidad, las personas han perdido el placer de tomar fotos que valgan,
+            que perduren sin requerir validación social.
+          </p>
+          <p>
+            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía y se compartía por el el puro placer y trascendencia de hacerlo.
+          </p>
+          <small>
+            por Óscar A. Montiel | 2021
+          </small>
+
         </div>
       </div>
     )
