@@ -103,12 +103,13 @@ const App = () => {
         </div>
         <div className='sidebar-der'>
           <p>
-            La información digital muere si es olvidada. Tras la creación de redes sociales que fomentan
-            la rapidez y superficialidad, las personas han perdido el placer de tomar fotos que valgan,
-            que perduren sin requerir validación social.
+            ( en construcción ) La información digital muere si es olvidada. Tras la popularización de redes sociales que fomentan la rapidez y la superficialidad, las personas han comenzado a perder el itnerés por complementar la vida de otros de manera más profunda.
           </p>
           <p>
-            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía y se compartía por el el puro placer y trascendencia de hacerlo.
+            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía. A su vez, busca reflexionar sobre cómo las interfaces máquina-humano moldean nuestra conciencia y acciones, es decir, Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social. ¿Cuántos selfies hay?
+          </p>
+          <p>
+
           </p>
           <small>
             por Óscar A. Montiel | 2021
