@@ -106,7 +106,7 @@ const App = () => {
             ( en construcción ) La información digital muere si es olvidada. Tras la popularización de redes sociales que fomentan la rapidez y la superficialidad, las personas han comenzado a perder el itnerés por complementar la vida de otros de manera más profunda.
           </p>
           <p>
-            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía. A su vez, busca reflexionar sobre cómo las interfaces máquina-humano moldean nuestra conciencia y acciones, es decir, Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social. ¿Cuántos selfies hay?
+            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía. A su vez, busca reflexionar sobre cómo las interfaces máquina-humano moldean nuestra conciencia y acciones, es decir, Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social. ¿Cuántos selfies hay? Selecciona una fecha y te mostrará las fotos tomadas en ese día con las etiquetas de Querétaro o CDMX.
           </p>
           <p>
 
