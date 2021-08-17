@@ -14,7 +14,8 @@
 
 .texto-zona{
   font-family: 'Atkinson Hyperlegible', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
+  margin: 0;
 }
 
 .photo-timeline {
@@ -47,7 +48,7 @@
 }
 
 .sidebar-izq {
-  height: 100vh;
+  height: auto;
   padding: 1rem;
   position: fixed;
   width: 20vw
@@ -57,7 +58,7 @@
   line-height: 1.5;
   height: 100vh;
   padding: 1rem;
-  position: fixed;
+  position: absolute;
   width: 20vw;
   right: 0;
   top: 0;

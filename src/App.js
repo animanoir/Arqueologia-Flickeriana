@@ -82,20 +82,20 @@ const App = () => {
               value={date}
             />
             <div>
+            <Select
+              options={opcionesZonas}
+              onChange={
+                value => {
+                  setZonaTags(value.value)
+                  setZonaLabel(value.label)
+                }
+              }
+            />
+          </div>
+            <div>
               <h1 className='titulo'>Arqueología Flickeriana:
               </h1>
-              <h2 className='texto-zona'>{zonaLabel}</h2>
-            </div>
-            <div>
-              <Select
-                options={opcionesZonas}
-                onChange={
-                  value => {
-                    setZonaTags(value.value)
-                    setZonaLabel(value.label)
-                  }
-                }
-              />
+              <p className='texto-zona'>{zonaLabel}</p>
             </div>
         </div>
         <div className='photo-timeline'>
@@ -114,7 +114,6 @@ const App = () => {
           <small>
             por Óscar A. Montiel | 2021
           </small>
-
         </div>
       </div>
     )
