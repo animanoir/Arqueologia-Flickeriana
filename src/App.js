@@ -6,7 +6,6 @@ import moment from 'moment'
 import Select from 'react-select';
 import './App.css';
 
-
 const opcionesZonas = [
   {value: 'querétaro%2Cqueretaro%2Cqro', label: 'Querétaro'},
   {value: 'ciudaddeméxico%2Ccdmx%2C%2Cdistritofederal', label: 'Ciudad de México'},
@@ -36,7 +35,7 @@ const App = () => {
     useEffect(() => {
       console.log(`minTakenDate ${minTakenDate}: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate ${maxTakenDate}: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
       setPhotos([0])
-      fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=840642ee4589f9f9a3ad5572658073f7&tags=${zonaTags}&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&user_id=&page=1&format=json&nojsoncallback=1`)
+      fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.REACT_APP_API_KEY}&tags=${zonaTags}&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&user_id=&page=1&format=json&nojsoncallback=1`)
       .then(function(response){
         return response.json();
       })
@@ -44,7 +43,7 @@ const App = () => {
         let picArray = j.photos.photo.map((pic, i) => {
           var srcPath = 'https://farm'+pic.farm+'.staticflickr.com/'+pic.server+'/'+pic.id+'_'+pic.secret+'.jpg';
           return(
-            <div key={i} className='photo-timeline-item'>
+            <div key={i} className='photo-timeline-item fade-in'>
               <a href={`https://www.flickr.com/photos/${pic.owner}/${pic.id}`} target="_blank">
                 <img className='photo-timeline-img' alt="dogs" src={srcPath} />
               </a>
@@ -67,6 +66,7 @@ const App = () => {
       <div className="App">
         <div className='sidebar-izq'>
           <Calendar
+              className='calendario'
               locale={'es-MX'}
               minDate={new Date(2004, 1, 10)}
               maxDate={new Date()}
@@ -93,17 +93,17 @@ const App = () => {
             />
           </div>
             <div>
-              <h1 className='titulo'>Arqueología Flickeriana:
+              <h1 className='titulo blanco'>Arqueología Flickeriana:
               </h1>
-              <p className='texto-zona'>{zonaLabel}</p>
+              <p className='texto-zona blanco'>{zonaLabel}</p>
             </div>
         </div>
-        <div className='photo-timeline'>
+        <div className='photo-timeline blanco'>
           {photos}
         </div>
-        <div className='sidebar-der'>
-          <p>
-            ( en construcción ) La información digital muere si es olvidada. Tras la popularización de redes sociales que fomentan la rapidez y la superficialidad, las personas han comenzado a perder el itnerés por complementar la vida de otros de manera más profunda.
+        <div className='sidebar-der blanco'>
+          <p style={{marginTop: '0'}}>
+            <b>La información muere si es olvidada</b>. Tras la popularización de redes sociales que fomentan la rapidez y la superficialidad, las personas han comenzado a perder el itnerés por complementar la vida de otros de manera más profunda.
           </p>
           <p>
             <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía. A su vez, busca reflexionar sobre cómo las interfaces máquina-humano moldean nuestra conciencia y acciones, es decir, Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social. ¿Cuántos selfies hay? Selecciona una fecha y te mostrará las fotos tomadas en ese día con las etiquetas de Querétaro o CDMX.
