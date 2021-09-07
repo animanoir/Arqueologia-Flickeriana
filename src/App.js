@@ -107,14 +107,13 @@ const App = () => {
           <p>
             <b>Arqueología Flickeriana</b> invita a redescubrir fotografías al borde del olvido para revivir aquellos tiempos donde la validación socio-digital <b>{'<$>realmente</$>'}</b> no importaba.
           </p>
-          <p>¿galería de fotos?</p>
           <p>
-            A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldean nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
+            A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldea nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
           </p>
           <p>
           </p>
           <small>
-            por Óscar A. Montiel | 2021 (lo que aconteció en el día)
+            por Óscar A. Montiel | 2021 (lo que aconteció en el día, nárralo)
           </small>
         </div>
       </div>
