@@ -34,7 +34,7 @@ const App = () => {
 
     useEffect(() => {
       console.log(`minTakenDate ${minTakenDate}: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate ${maxTakenDate}: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
-      setPhotos([0])
+      setPhotos(['Obteniendo imágenes desde los servidores de Flickr...'])
       fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.REACT_APP_API_KEY}&tags=${zonaTags}&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&user_id=&page=1&format=json&nojsoncallback=1`)
       .then(function(response){
         return response.json();
@@ -45,7 +45,7 @@ const App = () => {
           return(
             <div key={i} className='photo-timeline-item fade-in'>
               <a href={`https://www.flickr.com/photos/${pic.owner}/${pic.id}`} target="_blank">
-                <img className='photo-timeline-img' alt="dogs" src={srcPath} />
+                <img className='photo-timeline-img' alt={pic.title} src={srcPath} />
               </a>
               <div className='info-foto-contenedor'>
                 <small className='photo-timeline-title'>
@@ -84,6 +84,7 @@ const App = () => {
             <div>
             <Select
               options={opcionesZonas}
+              placeholder='Seleccionar territorio'
               onChange={
                 value => {
                   setZonaTags(value.value)
@@ -93,26 +94,27 @@ const App = () => {
             />
           </div>
             <div>
-              <h1 className='titulo blanco'>Arqueología Flickeriana:
-              </h1>
               <p className='texto-zona blanco'>{zonaLabel}</p>
             </div>
         </div>
         <div className='photo-timeline blanco'>
-          {photos}
+              {photos}
         </div>
         <div className='sidebar-der blanco'>
           <p style={{marginTop: '0'}}>
-            <b>La información muere si es olvidada</b>. Tras la popularización de redes sociales que fomentan la rapidez y la superficialidad, las personas han comenzado a perder el itnerés por complementar la vida de otros de manera más profunda.
+              Tras la popularización de redes sociales que fomentan la rapidez y superficialidad de la vida, las personas han dejado de <i>estar en el momento, en el aquí y ahora</i>, sustituyéndolo por un futuro incierto de vacua popularidad.
           </p>
           <p>
-            <b>Arqueología Flickeriana</b> permite redescubrir fotografías en el borde del olvido e invita a rememorar tiempos donde la validación socio-digital no existía. A su vez, busca reflexionar sobre cómo las interfaces máquina-humano moldean nuestra conciencia y acciones, es decir, Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social. ¿Cuántos selfies hay? Selecciona una fecha y te mostrará las fotos tomadas en ese día con las etiquetas de Querétaro o CDMX.
+            <b>Arqueología Flickeriana</b> invita a redescubrir fotografías al borde del olvido para revivir aquellos tiempos donde la validación socio-digital <b>{'<$>realmente</$>'}</b> no importaba.
+          </p>
+          <p>¿galería de fotos?</p>
+          <p>
+            A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldean nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
           </p>
           <p>
-
           </p>
           <small>
-            por Óscar A. Montiel | 2021
+            por Óscar A. Montiel | 2021 (lo que aconteció en el día)
           </small>
         </div>
       </div>

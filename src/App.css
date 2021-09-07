@@ -19,7 +19,7 @@ body {
 .texto-zona {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-size: 2.2rem;
-  margin: 0;
+  /* margin: 0; */
 }
 
 .photo-timeline {
@@ -251,3 +251,4 @@ body {
   0% {opacity:0;}
   100% {opacity:1;}
 }
+
