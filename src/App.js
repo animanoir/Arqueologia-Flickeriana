@@ -8,7 +8,35 @@ import './App.css';
 
 const opcionesZonas = [
   {value: 'querétaro%2Cqueretaro%2Cqro', label: 'Querétaro'},
-  {value: 'ciudaddeméxico%2Ccdmx%2C%2Cdistritofederal', label: 'Ciudad de México'},
+  {value: 'ciudaddeméxico%2Ccdmx', label: 'Ciudad de México'},
+  {value: 'aguascalientes', label: 'Aguascalientes'},
+  {value: 'bajacalifornia', label: 'Baja California'},
+  {value: 'campeche', label: 'Campeche'},
+  {value: 'chiapas', label: 'Chiapas'},
+  {value: 'Saltillo', label: 'Saltillo'},
+  {value: 'Colima%2Cmanzanillo', label: 'Colima'},
+  {value: 'Durango', label: 'Durango'},
+  {value: 'Guanajuato', label: 'Guanajuato'},
+  {value: 'Guerrero', label: 'Guerrero'},
+  {value: 'Hidalgo', label: 'Hidalgo'},
+  {value: 'Jalisco%2CGuadalajara', label: 'Guadalakara'},
+  {value: 'estadodemexico%2Cecatepec%2Ctolucadelerdo', label: 'Estado De México'},
+  {value: 'michioacán%2Cmichioacan%2Cmorelia', label: 'Michoacán'},
+  {value: 'morelos%2Ccuernavaca', label: 'Morelos'},
+  {value: 'nayarit%2Ctepic', label: 'Nayarit'},
+  {value: 'monterrey%2Cnuevoleon', label: 'Moneterrey'},
+  {value: 'oaxaca', label: 'Oaxaca'},
+  {value: 'puebla%2Cpuebladezaragoza', label: 'Puebla'},
+  {value: 'quintanaroo%2Cchetumal%2Ccancún%2Ccancun', label: 'Quintana Roo'},
+  {value: 'sanluispotosi%2Csanluiospotosí', label: 'San Luis Potosí'},
+  {value: 'sinaola%2Cculiacán%2Cculiacan', label: 'Sinaloa'},
+  {value: 'sonora%2Chermosillo', label: 'Sonora'},
+  {value: 'tabasco%2Cvillahermosa', label: 'Tabasco'},
+  {value: 'tamaulipas%2Cciudadvictoria%2Creynosa', label: 'Tamaulipas'},
+  {value: 'tlaxcala%2Ctlaxcaladexicohténcatl%2Cxicohténcatl%2Cxicotencatl', label: 'Tlaxcala'},
+  {value: 'veracruz', label: 'Veracruz'},
+  {value: 'yucatán%2Cyucatan%2Cmérida%2Cmerida', label: 'Yucatán'},
+  {value: 'zacatecas', label: 'Zacatecas'},
 ]
 
 function toTimestamp(strDate){
@@ -102,10 +130,10 @@ const App = () => {
         </div>
         <div className='sidebar-der blanco'>
           <p style={{marginTop: '0'}}>
-              Tras la popularización de redes sociales que fomentan la rapidez y superficialidad de la vida, las personas han dejado de <i>estar en el momento, en el aquí y ahora</i>, sustituyéndolo por un futuro incierto de vacua popularidad.
+                <b>Historias se capturan a cada momento con el propósito de copartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles.
           </p>
           <p>
-            <b>Arqueología Flickeriana</b> invita a redescubrir fotografías al borde del olvido para revivir aquellos tiempos donde la validación socio-digital <b>{'<$>realmente</$>'}</b> no importaba.
+            <b>Arqueología Flickeriana</b> invita a redescubrir fotografías al borde del olvido y requisar las plataformas populares de ahora.
           </p>
           <p>
             A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldea nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
