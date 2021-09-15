@@ -61,7 +61,7 @@ const App = () => {
   const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-      console.log(`minTakenDate ${minTakenDate}: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate ${maxTakenDate}: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
+      //console.log(`minTakenDate ${minTakenDate}: ${moment.unix(minTakenDate).format("DD-MM-YYYY HH:mm:ss")}, maxTakenDate ${maxTakenDate}: ${moment.unix(maxTakenDate).format("DD-MM-YYYY HH:mm:ss")}`)
       setPhotos(['Obteniendo imágenes desde los servidores de Flickr...'])
       fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.REACT_APP_API_KEY}&tags=${zonaTags}&min_taken_date=${minTakenDate}&max_taken_date=${maxTakenDate}&user_id=&page=1&format=json&nojsoncallback=1`)
       .then(function(response){
@@ -85,7 +85,11 @@ const App = () => {
             </div>
           )
         })
-        setPhotos(picArray)
+        if(picArray.length <= 0){
+          setPhotos(['No se encontraron fotos tomadas en esta fecha...'])
+        }else{
+          setPhotos(picArray)
+        }
       })
 
     }, [date, zonaTags])
@@ -142,7 +146,7 @@ const App = () => {
           <p>
           </p>
           <p className='autor'>
-            por <a style={{color: 'rgba(243, 243, 243, 0.574)'}} href='https://www.animanoir.xyz/'>Óscar A. Montiel</a> | 2021 (lo que aconteció en el día, nárralo (en construcción))
+            por <a style={{color: 'rgba(243, 243, 243, 0.574)'}} target="_blank" href='https://www.animanoir.xyz/'>Óscar A. Montiel</a> | 2021 (lo que aconteció en el día, nárralo (en construcción))
           </p>
         </div>
       </div>
