@@ -92,6 +92,7 @@ const App = () => {
 
     return (
       <div className="App">
+      <div className="foreground" />
         <div className='sidebar-izq'>
           <Calendar
               className='calendario'
@@ -141,7 +142,7 @@ const App = () => {
           <p>
           </p>
           <p className='autor'>
-            por Óscar A. Montiel | 2021 (lo que aconteció en el día, nárralo (en construcción)) <a href='https://www.animanoir.xyz/'>sitio web.</a>
+            por <a style={{color: 'rgba(243, 243, 243, 0.574)'}} href='https://www.animanoir.xyz/'>Óscar A. Montiel</a> | 2021 (lo que aconteció en el día, nárralo (en construcción))
           </p>
         </div>
       </div>
