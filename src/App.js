@@ -7,8 +7,8 @@ import Select from 'react-select';
 import './App.css';
 
 const opcionesZonas = [
-  {value: 'querétaro%2Cqueretaro%2Cqro', label: 'Querétaro'},
-  {value: 'ciudaddeméxico%2Ccdmx', label: 'Ciudad de México'},
+  {value: 'querétaro%2Cqueretaro%2C', label: 'Querétaro'},
+  {value: 'ciudaddeméxico%2Ciztapalapa', label: 'Ciudad de México'},
   {value: 'aguascalientes', label: 'Aguascalientes'},
   {value: 'bajacalifornia', label: 'Baja California'},
   {value: 'campeche', label: 'Campeche'},
@@ -19,12 +19,12 @@ const opcionesZonas = [
   {value: 'Guanajuato', label: 'Guanajuato'},
   {value: 'Guerrero', label: 'Guerrero'},
   {value: 'Hidalgo', label: 'Hidalgo'},
-  {value: 'Jalisco%2CGuadalajara', label: 'Guadalakara'},
+  {value: 'Jalisco%2CGuadalajara', label: 'Guadalajara'},
   {value: 'estadodemexico%2Cecatepec%2Ctolucadelerdo', label: 'Estado De México'},
   {value: 'michioacán%2Cmichioacan%2Cmorelia', label: 'Michoacán'},
   {value: 'morelos%2Ccuernavaca', label: 'Morelos'},
   {value: 'nayarit%2Ctepic', label: 'Nayarit'},
-  {value: 'monterrey%2Cnuevoleon', label: 'Moneterrey'},
+  {value: 'monterrey%2Cnuevoleon', label: 'Monterrey'},
   {value: 'oaxaca', label: 'Oaxaca'},
   {value: 'puebla%2Cpuebladezaragoza', label: 'Puebla'},
   {value: 'quintanaroo%2Cchetumal%2Ccancún%2Ccancun', label: 'Quintana Roo'},
@@ -130,19 +130,19 @@ const App = () => {
         </div>
         <div className='sidebar-der blanco'>
           <p style={{marginTop: '0'}}>
-                <b>Historias se capturan a cada momento con el propósito de copartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles.
+                <b>Historias se capturan a cada momento con el propósito de compartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles. Tiempo y territorio, pares que conjuran la toma perfecta.
           </p>
           <p>
-            <b>Arqueología Flickeriana</b> invita a redescubrir fotografías al borde del olvido y requisar las plataformas populares de ahora.
+            <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con fotografías al borde del olvido alojadas en la plataforma de <b>Flickr</b>. A su vez, incita a cuestionar las plataformas populares de hoy en día, como Instagram, cuyo sistema promueve el consumo y personalización de publicidad, y deja en segundo plano la calidad del contenido compartido. <i>¿Y si fomentamos los servicios adecuados para cada experiencia humana? </i>
           </p>
           <p>
             A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldea nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
           </p>
           <p>
           </p>
-          <small>
-            por Óscar A. Montiel | 2021 (lo que aconteció en el día, nárralo)
-          </small>
+          <p className='autor'>
+            por Óscar A. Montiel | 2021 (lo que aconteció en el día, nárralo (en construcción)) <a href='https://www.animanoir.xyz/'>sitio web.</a>
+          </p>
         </div>
       </div>
     )

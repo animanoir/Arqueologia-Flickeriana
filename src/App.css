@@ -18,8 +18,14 @@ body {
 
 .texto-zona {
   font-family: 'Atkinson Hyperlegible', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2rem;
   /* margin: 0; */
+}
+
+.autor {
+  color: rgba(243, 243, 243, 0.445);
+  font-size: 0.8rem!important;
+
 }
 
 .photo-timeline {
@@ -67,6 +73,10 @@ body {
   width: 20vw;
   right: 0;
   top: 0;
+}
+
+.sidebar-der p {
+  font-size: 0.9rem;
 }
 
 .blanco {
