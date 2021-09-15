@@ -130,7 +130,7 @@ const App = () => {
               {photos}
         </div>
         <div className='sidebar-der blanco'>
-          <p style={{marginTop: '0'}}>
+          <p style={{marginTop: '0', fontSize: '1.3rem'}}>
                 <b>Historias se capturan a cada momento con el propósito de compartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles. Tiempo y territorio, pares que conjuran la toma perfecta.
           </p>
           <p>
