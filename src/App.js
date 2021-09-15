@@ -97,6 +97,22 @@ const App = () => {
     return (
       <div className="App">
       <div className="foreground" />
+      <div className='sidebar-der blanco'>
+        <p style={{marginTop: '0', fontSize: '1.3rem'}}>
+              <b>Historias se capturan a cada momento con el propósito de compartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles. Tiempo y territorio, pares que conjuran la toma perfecta.
+        </p>
+        <p>
+          <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con fotografías al borde del olvido alojadas en la plataforma de <b>Flickr</b>. A su vez, incita a cuestionar las plataformas populares de hoy en día, como Instagram, cuyo sistema promueve el consumo y personalización de publicidad, y deja en segundo plano la calidad del contenido compartido. <i>¿Y si fomentamos los servicios adecuados para cada experiencia humana? </i>
+        </p>
+        <p>
+          A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldea nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
+        </p>
+        <p>
+        </p>
+        <p className='autor'>
+          por <a style={{color: 'rgba(243, 243, 243, 0.574)'}} target="_blank" href='https://www.animanoir.xyz/'>Óscar A. Montiel</a> | 2021 (lo que aconteció en el día, nárralo (en construcción))
+        </p>
+      </div>
         <div className='sidebar-izq'>
           <Calendar
               className='calendario'
@@ -132,22 +148,6 @@ const App = () => {
         </div>
         <div className='photo-timeline blanco'>
               {photos}
-        </div>
-        <div className='sidebar-der blanco'>
-          <p style={{marginTop: '0', fontSize: '1.3rem'}}>
-                <b>Historias se capturan a cada momento con el propósito de compartirlas como un pedazo de eternidad</b>. Únicas. Inigualables. Irreproducibles. Tiempo y territorio, pares que conjuran la toma perfecta.
-          </p>
-          <p>
-            <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con fotografías al borde del olvido alojadas en la plataforma de <b>Flickr</b>. A su vez, incita a cuestionar las plataformas populares de hoy en día, como Instagram, cuyo sistema promueve el consumo y personalización de publicidad, y deja en segundo plano la calidad del contenido compartido. <i>¿Y si fomentamos los servicios adecuados para cada experiencia humana? </i>
-          </p>
-          <p>
-            A su vez, busca reflexionar sobre cómo es que la Experiencia de usuario (UX) moldea nuestra conciencia, ergo acciones para consigo mismo y los otros. Flickr diseñado especificamente para compartir fotografía, sin "likes", sin validación social {'<<¿cuántos selfies crees encontrar?>>'}
-          </p>
-          <p>
-          </p>
-          <p className='autor'>
-            por <a style={{color: 'rgba(243, 243, 243, 0.574)'}} target="_blank" href='https://www.animanoir.xyz/'>Óscar A. Montiel</a> | 2021 (lo que aconteció en el día, nárralo (en construcción))
-          </p>
         </div>
       </div>
     )

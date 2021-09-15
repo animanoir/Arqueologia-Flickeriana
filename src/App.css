@@ -65,17 +65,16 @@ body {
   height: auto;
   padding: 1rem;
   position: fixed;
-  width: 20vw
+  width: 20vw;
+  right: 0;
 }
 
 .sidebar-der {
   font-family: 'Open Sans', sans-serif;
   line-height: 1.5;
-  height: 100vh;
   padding: 1rem;
   position: absolute;
   width: 20vw;
-  right: 0;
   top: 0;
 }
 
@@ -89,7 +88,7 @@ body {
 
 
 .react-calendar {
-  width: 350px;
+  width: 100%;
   max-width: 100%;
   background: white;
   border: 1px solid #a0a096;
@@ -324,5 +323,27 @@ body {
 
   to {
     transform: translate3d(-7rem, 0, 0);
+  }
+}
+
+@media screen and (max-width: 1000px){
+
+  .sidebar-izq {
+    height: auto;
+    padding: 1rem;
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .sidebar-der {
+    width: 100%;
+    padding: 0;
+    position: relative;
+  }
+
+  .photo-timeline {
+    width: 100%;
+    position: relative;
   }
 }
