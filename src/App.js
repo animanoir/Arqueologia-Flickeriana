@@ -132,7 +132,7 @@ const App = () => {
         <p>
           <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con
           fotografías al borde del olvido alojadas en la plataforma, otrora popular, de{" "}
-          <b>Flickr</b>, mostrando <b>todas las fotos tomadas en el mismo día en cualquier estado de México...</b>
+          <b>Flickr</b>, mostrando <b>todas las fotos tomadas en el mismo día en cualquier estado de México.</b>
           <div className="sangria">
           <p>¿Qué pasaba en los días previos a un sismo? ¿Qué político se alababa mientras pobres imploraban alimento? ¿Qué arte nacía mientras otro fallecía?</p>
           </div>
@@ -177,6 +177,7 @@ const App = () => {
         />
         <div>
           <Select
+            className="select-custom"
             options={opcionesZonas}
             placeholder="Seleccionar territorio"
             onChange={(value) => {
