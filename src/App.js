@@ -131,8 +131,14 @@ const App = () => {
         </p>
         <p>
           <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con
-          fotografías al borde del olvido alojadas en la plataforma de{" "}
-          <b>Flickr</b>. A su vez, incita a cuestionar las plataformas populares
+          fotografías al borde del olvido alojadas en la plataforma, otrora popular, de{" "}
+          <b>Flickr</b>, mostrando <b>todas las fotos tomadas en el mismo día en cualquier estado de México...</b>
+          <div className="sangria">
+          <p>¿Qué pasaba en los días previos a un sismo? ¿Qué político se alababa mientras pobres imploraban alimento? ¿Qué arte nacía mientras otro fallecía?</p>
+          </div>
+          </p>
+          <p>
+          A su vez, incita a cuestionar las plataformas populares
           de hoy en día, como Instagram, cuyo sistema promueve el consumo y
           personalización de publicidad, y deja en segundo plano la calidad del
           contenido compartido.{" "}
@@ -151,7 +157,7 @@ const App = () => {
           >
             Óscar A. Montiel
           </a>{" "}
-          | 2021 (lo que aconteció en el día, nárralo (en construcción))
+          | 2021
         </p>
       </div>
       <div className="sidebar-izq">
@@ -180,7 +186,9 @@ const App = () => {
           />
         </div>
         <div>
-            <p className="blanco" style={{marginBottom: '.5rem'}}>Territorio actual:</p>
+          <p className="blanco" style={{ marginBottom: ".5rem" }}>
+            Territorio actual:
+          </p>
           <p className="texto-zona blanco">{zonaLabel}</p>
         </div>
       </div>

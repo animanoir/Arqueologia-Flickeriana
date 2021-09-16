@@ -16,6 +16,14 @@ body {
   font-family: 'Ledger', serif;
 }
 
+.sangria {
+  margin-left: 5rem;
+}
+
+.sangria p {
+  line-height: 2;
+}
+
 .texto-zona {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-size: 2rem;
@@ -25,12 +33,11 @@ body {
 
 .autor {
   color: rgba(243, 243, 243, 0.274);
-  font-size: 0.8rem!important;
-
+  font-size: 0.8rem !important;
 }
 
 .photo-timeline {
-  padding-top: 5rem;
+  padding-top: 3rem;
   display: flex;
   flex-direction: column;
   width: 50vw;
@@ -242,29 +249,55 @@ body {
   -o-animation: fadeIn 1s;
   -ms-animation: fadeIn 1s;
 }
+
 @keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @-moz-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @-webkit-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @-o-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @-ms-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* Fondo noise (thx to Omar (@OmarOlaes) por encontrar la solución :~)) */
@@ -328,7 +361,7 @@ body {
   }
 }
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1000px) {
 
   .sidebar-izq {
     height: auto;
