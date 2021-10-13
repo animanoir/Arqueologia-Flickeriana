@@ -157,7 +157,7 @@ const App = () => {
           >
             Óscar A. Montiel
           </a>{" "}
-          | 2021
+          | 2021 | Seleccionado para exhibición en <a style={{ color: "rgba(243, 243, 243, 0.574)" }} href="https://cecriticc.org/tierrayterritorio/">  Encuentro de Imagen MMXXI: tierra y territorio (Octubre 2021)</a>
         </p>
       </div>
       <div className="sidebar-izq">
