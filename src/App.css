@@ -95,6 +95,10 @@ body {
   color: rgb(243, 243, 243);
 }
 
+#edm-logo {
+  width: 100%;
+}
+
 
 .react-calendar {
   width: 100%;

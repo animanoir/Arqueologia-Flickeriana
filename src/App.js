@@ -159,6 +159,7 @@ const App = () => {
           </a>{" "}
           | 2021 | Seleccionado para exhibición en <a style={{ color: "rgba(243, 243, 243, 0.574)" }} href="https://cecriticc.org/tierrayterritorio/">  Encuentro de Imagen MMXXI: tierra y territorio (Octubre 2021)</a>
         </p>
+        <img id="edm-logo" src="./encuentro-header-logo.png" alt="Encuentro de Imagen MMXXI Tierra y Territorio UAQ"/>
       </div>
       <div className="sidebar-izq">
         <Calendar
