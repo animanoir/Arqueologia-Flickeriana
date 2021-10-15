@@ -146,6 +146,9 @@ const App = () => {
             ¿Y si fomentamos los servicios adecuados para cada experiencia
             humana?{" "}
           </i>
+          <p>
+          <a style={{ color: "rgba(243, 243, 243, 0.574)" }} href="https://safetyinsolitude.blogspot.com/2021/10/proyecto-arqueologia-flickeriana-2021.html">Más información aquí.</a>
+          </p>
         </p>
         <p></p>
         <p className="autor">
