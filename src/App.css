@@ -308,6 +308,7 @@ body {
 .foreground {
   top: -10rem;
   left: -10rem;
+  filter: brightness(0.3);
   width: calc(100% + 20rem);
   height: calc(100% + 20rem);
   z-index: 0;
