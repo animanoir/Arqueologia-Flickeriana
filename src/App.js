@@ -123,32 +123,14 @@ const App = () => {
       <div className="sidebar-der blanco">
         <p style={{ marginTop: "0", fontSize: "1.3rem" }}>
           <b>
-            Historias se capturan a cada momento con el propósito de
-            compartirlas como un pedazo de eternidad
-          </b>
-          . Únicas. Inigualables. Irreproducibles. Tiempo y territorio, pares
-          que conjuran la toma perfecta.
+          Historias se capturan a cada instante, fragmentos de eternidad destinados a ser compartidos. Son únicas, inigualables, irrepetibles. Tiempo y lugar se combinan para conjurar la toma perfecta.
         </p>
         <p>
-          <b>Arqueología Flickeriana</b> invita a redescubrir e inspirarse con
-          fotografías al borde del olvido alojadas en la plataforma, otrora popular, de{" "}
-          <b>Flickr</b>, mostrando <b>todas las fotos tomadas en el mismo día en cualquier estado de México.</b>
-          <div className="sangria">
-          <p>¿Qué pasaba en los días previos a un sismo? ¿Qué político se alababa mientras pobres imploraban alimento? ¿Qué arte nacía mientras otro fallecía?</p>
-          </div>
-          </p>
-          <p>
-          A su vez, incita a cuestionar las plataformas populares
-          de hoy en día, como Instagram, cuyo sistema promueve el consumo y
-          personalización de publicidad, y deja en segundo plano la calidad del
-          contenido compartido.{" "}
-          <i>
-            ¿Y si fomentamos los servicios adecuados para cada experiencia
-            humana?{" "}
-          </i>
-          <p>
-          <a style={{ color: "rgba(243, 243, 243, 0.574)" }} href="https://safetyinsolitude.blogspot.com/2021/10/proyecto-arqueologia-flickeriana-2021.html">Más información aquí.</a>
-          </p>
+        Arqueología Flickeriana nos invita a redescubrir y encontrar inspiración en fotografías casi olvidadas, alojadas en la otrora popular plataforma de Flickr. A través de esta propuesta, se revelan imágenes tomadas en un mismo día en cualquier rincón de México.
+
+        ¿Qué sucedía en los días previos a un sismo? ¿Qué político recibía alabanzas mientras los más necesitados clamaban por alimento? ¿Qué arte emergía mientras otro quedaba en el olvido?
+
+        Este proyecto también nos anima a reflexionar sobre las plataformas actuales, como Instagram, cuyo enfoque prioriza el consumo y la personalización de publicidad, relegando la calidad del contenido a un segundo plano. ¿Y si promovemos servicios diseñados para enriquecer cada experiencia humana, en lugar de moldearlas al interés comercial?
         </p>
         <p></p>
         <p className="autor">
