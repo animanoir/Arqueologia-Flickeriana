@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Ledger&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap");
+/* Fonts are loaded from index.html (preconnect + single stylesheet request) */
 
 body {
   background-color: rgb(7, 7, 7);
@@ -96,6 +94,25 @@ body {
 
 .select-custom {
   margin-top: 0.5rem;
+}
+
+.load-more {
+  margin: 0 auto 4rem;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: 1px solid rgba(243, 243, 243, 0.4);
+  color: rgb(243, 243, 243);
+  font-family: "Atkinson Hyperlegible", sans-serif;
+  cursor: pointer;
+}
+
+.load-more:hover:enabled {
+  border-color: rgb(243, 243, 243);
+}
+
+.load-more:disabled {
+  opacity: 0.5;
+  cursor: wait;
 }
 
 #edm-logo {
@@ -306,11 +323,12 @@ body {
   }
 }
 
-/* Fondo noise (thx to Omar (@OmarOlaes) por encontrar la solución :~)) */
+/* Fondo noise (thx to Omar (@OmarOlaes) por encontrar la solución :~))
+   The old brightness(0.3) filter is baked into noise-1.png itself, so the
+   animated layer no longer needs per-frame filtering */
 .foreground {
   top: -10rem;
   left: -10rem;
-  filter: brightness(0.3);
   width: calc(100% + 20rem);
   height: calc(100% + 20rem);
   z-index: 0;
@@ -318,8 +336,15 @@ body {
   pointer-events: none;
   background-position: 50%;
   background-image: url("./noise-1.png");
-  pointer-events: none;
   animation: foreground 1s steps(2) infinite;
+}
+
+/* Static grain (same look, no motion) for users whose OS asks for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .foreground,
+  .fade-in {
+    animation: none;
+  }
 }
 
 @keyframes foreground {

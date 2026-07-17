@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 
-const flickrResponse = (photos) =>
+const flickrResponse = (photos, pages = 1) =>
   Promise.resolve({
-    json: () => Promise.resolve({ photos: { photo: photos } }),
+    json: () => Promise.resolve({ photos: { photo: photos, pages } }),
   });
 
 const samplePhoto = {
@@ -38,6 +38,7 @@ it("renders with Querétaro, Mexico as the default", async () => {
   await waitFor(() => expect(fetch).toHaveBeenCalled());
   const params = searchUrl().searchParams;
   expect(params.get("tags")).toBe("querétaro,queretaro");
+  expect(params.get("per_page")).toBe("30");
   // No day filter until a date is picked
   expect(params.get("min_taken_date")).toBeNull();
 });
@@ -131,7 +132,7 @@ it("updates the URL when picking a date in the calendar", async () => {
   );
 });
 
-it("shows the photos Flickr returns", async () => {
+it("shows the photos Flickr returns, lazily and responsively", async () => {
   vi.stubGlobal(
     "fetch",
     vi.fn(() => flickrResponse([samplePhoto])),
@@ -142,8 +143,43 @@ it("shows the photos Flickr returns", async () => {
     "src",
     "https://live.staticflickr.com/65535/1234_abcd.jpg",
   );
+  expect(image).toHaveAttribute("loading", "lazy");
+  expect(image).toHaveAttribute(
+    "srcset",
+    "https://live.staticflickr.com/65535/1234_abcd_m.jpg 240w, https://live.staticflickr.com/65535/1234_abcd.jpg 500w",
+  );
   expect(image.closest("a")).toHaveAttribute(
     "href",
     "https://www.flickr.com/photos/99@N00/1234",
+  );
+  // A single page of results shows no pagination button
+  expect(screen.queryByRole("button", { name: "Load more photos" })).toBeNull();
+});
+
+it("loads more photos on demand", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn((url) => {
+      const pageNumber = new URL(url).searchParams.get("page");
+      return flickrResponse(
+        [
+          {
+            ...samplePhoto,
+            id: `id-${pageNumber}`,
+            title: `Photo ${pageNumber}`,
+          },
+        ],
+        3,
+      );
+    }),
+  );
+  render(<App />);
+  await screen.findByAltText("Photo 1");
+  fireEvent.click(screen.getByRole("button", { name: "Load more photos" }));
+  await screen.findByAltText("Photo 2");
+  // Page 1 stays on screen; page 2 was appended
+  expect(screen.getByAltText("Photo 1")).toBeInTheDocument();
+  expect(new URL(fetch.mock.calls.at(-1)[0]).searchParams.get("page")).toBe(
+    "2",
   );
 });

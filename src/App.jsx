@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
@@ -12,6 +12,7 @@ const PARAM_TERRITORY = "territory";
 const LEGACY_PARAM_DATE = "fecha";
 const LEGACY_PARAM_TERRITORY = "territorio";
 const END_OF_DAY_SECONDS = 86399;
+const PHOTOS_PER_PAGE = 30;
 
 const API_KEY =
   import.meta.env.VITE_FLICKR_API_KEY ??
@@ -60,6 +61,11 @@ const App = () => {
   );
   const [photos, setPhotos] = useState([]);
   const [message, setMessage] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  // Increments on every new search so stale responses can be ignored
+  const searchIdRef = useRef(0);
 
   // Mirror the selection into the URL so the view can be shared by copying it
   useEffect(() => {
@@ -80,16 +86,13 @@ const App = () => {
     );
   }, [date, country, territory]);
 
-  useEffect(() => {
-    let cancelled = false;
-    setMessage("Fetching images from Flickr's servers...");
-    setPhotos([]);
-
+  const searchUrl = (pageNumber) => {
     const params = new URLSearchParams({
       method: "flickr.photos.search",
       api_key: API_KEY,
       tags: territory.value,
-      page: "1",
+      per_page: String(PHOTOS_PER_PAGE),
+      page: String(pageNumber),
       format: "json",
       nojsoncallback: "1",
     });
@@ -98,11 +101,20 @@ const App = () => {
       params.set("min_taken_date", String(startOfDay));
       params.set("max_taken_date", String(startOfDay + END_OF_DAY_SECONDS));
     }
+    return `https://api.flickr.com/services/rest/?${params}`;
+  };
 
-    fetch(`https://api.flickr.com/services/rest/?${params}`)
+  useEffect(() => {
+    const searchId = ++searchIdRef.current;
+    setMessage("Fetching images from Flickr's servers...");
+    setPhotos([]);
+    setPage(1);
+    setPageCount(0);
+
+    fetch(searchUrl(1))
       .then((response) => response.json())
       .then((data) => {
-        if (cancelled) return;
+        if (searchIdRef.current !== searchId) return;
         const found = data.photos?.photo ?? [];
         if (found.length === 0) {
           setMessage(
@@ -111,18 +123,32 @@ const App = () => {
         } else {
           setMessage(null);
           setPhotos(found);
+          setPageCount(Number(data.photos?.pages ?? 0));
         }
       })
       .catch(() => {
-        if (!cancelled) {
+        if (searchIdRef.current === searchId) {
           setMessage("Couldn't fetch photos from Flickr. Try again later.");
         }
       });
-
-    return () => {
-      cancelled = true;
-    };
   }, [date, territory]);
+
+  const loadMore = () => {
+    const searchId = searchIdRef.current;
+    const nextPage = page + 1;
+    setLoadingMore(true);
+    fetch(searchUrl(nextPage))
+      .then((response) => response.json())
+      .then((data) => {
+        if (searchIdRef.current !== searchId) return;
+        setPhotos((current) => [...current, ...(data.photos?.photo ?? [])]);
+        setPage(nextPage);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (searchIdRef.current === searchId) setLoadingMore(false);
+      });
+  };
 
   return (
     <div className="App">
@@ -216,26 +242,42 @@ const App = () => {
       </div>
       <div className="photo-timeline blanco">
         {message}
-        {photos.map((photo) => (
-          <div key={photo.id} className="photo-timeline-item fade-in">
-            <a
-              href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                className="photo-timeline-img"
-                alt={photo.title}
-                src={`https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
-              />
-            </a>
-            <div className="info-foto-contenedor">
-              <small className="photo-timeline-title">
-                {photo.title || ""}
-              </small>
+        {photos.map((photo) => {
+          const base = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}`;
+          return (
+            <div key={photo.id} className="photo-timeline-item fade-in">
+              <a
+                href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="photo-timeline-img"
+                  alt={photo.title}
+                  loading="lazy"
+                  decoding="async"
+                  src={`${base}.jpg`}
+                  srcSet={`${base}_m.jpg 240w, ${base}.jpg 500w`}
+                  sizes="(max-width: 1000px) 90vw, 50vw"
+                />
+              </a>
+              <div className="info-foto-contenedor">
+                <small className="photo-timeline-title">
+                  {photo.title || ""}
+                </small>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+        {page < pageCount && (
+          <button
+            className="load-more"
+            onClick={loadMore}
+            disabled={loadingMore}
+          >
+            {loadingMore ? "Loading..." : "Load more photos"}
+          </button>
+        )}
       </div>
     </div>
   );
