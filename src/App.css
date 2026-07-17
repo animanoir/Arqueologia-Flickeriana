@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Ledger&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ledger&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap");
 
 body {
   background-color: rgb(7, 7, 7);
 }
-
 
 .app {
   width: 100vw;
@@ -13,7 +12,7 @@ body {
 }
 
 .titulo {
-  font-family: 'Ledger', serif;
+  font-family: "Ledger", serif;
 }
 
 .sangria {
@@ -25,7 +24,7 @@ body {
 }
 
 .texto-zona {
-  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-family: "Atkinson Hyperlegible", sans-serif;
   font-size: 2rem;
   /* margin: 0; */
   margin-top: 0;
@@ -52,21 +51,21 @@ body {
 }
 
 .photo-timeline-item div {
-  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-family: "Atkinson Hyperlegible", sans-serif;
 }
 
 .photo-timeline-img {
-  width: 100%
+  width: 100%;
 }
 
 .info-foto-contenedor {
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   text-align: center;
 }
 
 .photo-timeline-title {
   font-size: 1rem;
-  font-family: 'Ledger', serif;
+  font-family: "Ledger", serif;
   text-align: right;
 }
 
@@ -79,7 +78,7 @@ body {
 }
 
 .sidebar-der {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   line-height: 1.5;
   padding: 1rem;
   position: absolute;
@@ -99,7 +98,6 @@ body {
   width: 100%;
 }
 
-
 .react-calendar {
   width: 100%;
   max-width: 100%;
@@ -118,7 +116,7 @@ body {
   margin: -0.5em;
 }
 
-.react-calendar--doubleView .react-calendar__viewContainer>* {
+.react-calendar--doubleView .react-calendar__viewContainer > * {
   width: 50%;
   margin: 0.5em;
 }
@@ -315,7 +313,7 @@ body {
   position: fixed;
   pointer-events: none;
   background-position: 50%;
-  background-image: url('./noise-1.png');
+  background-image: url("./noise-1.png");
   pointer-events: none;
   animation: foreground 1s steps(2) infinite;
 }
@@ -367,7 +365,6 @@ body {
 }
 
 @media screen and (max-width: 1000px) {
-
   .sidebar-izq {
     height: auto;
     padding: 1rem;
