@@ -2,144 +2,127 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Select from "react-select";
+import { countries } from "./territories";
 import "./App.css";
 
-const opcionesZonas = [
-  { value: "querétaro,queretaro", label: "Querétaro" },
-  { value: "ciudaddeméxico,iztapalapa", label: "Ciudad de México" },
-  { value: "aguascalientes", label: "Aguascalientes" },
-  { value: "bajacalifornia", label: "Baja California" },
-  { value: "campeche", label: "Campeche" },
-  { value: "chiapas", label: "Chiapas" },
-  { value: "Saltillo", label: "Saltillo" },
-  { value: "Colima,manzanillo", label: "Colima" },
-  { value: "Durango", label: "Durango" },
-  { value: "Guanajuato", label: "Guanajuato" },
-  { value: "Guerrero", label: "Guerrero" },
-  { value: "Hidalgo", label: "Hidalgo" },
-  { value: "Jalisco,Guadalajara", label: "Guadalajara" },
-  { value: "estadodemexico,ecatepec,tolucadelerdo", label: "Estado De México" },
-  { value: "michoacán,michoacan,morelia", label: "Michoacán" },
-  { value: "morelos,cuernavaca", label: "Morelos" },
-  { value: "nayarit,tepic", label: "Nayarit" },
-  { value: "monterrey,nuevoleon", label: "Monterrey" },
-  { value: "oaxaca", label: "Oaxaca" },
-  { value: "puebla,puebladezaragoza", label: "Puebla" },
-  { value: "quintanaroo,chetumal,cancún,cancun", label: "Quintana Roo" },
-  { value: "sanluispotosi,sanluispotosí", label: "San Luis Potosí" },
-  { value: "sinaloa,culiacán,culiacan", label: "Sinaloa" },
-  { value: "sonora,hermosillo", label: "Sonora" },
-  { value: "tabasco,villahermosa", label: "Tabasco" },
-  { value: "tamaulipas,ciudadvictoria,reynosa", label: "Tamaulipas" },
-  {
-    value: "tlaxcala,tlaxcaladexicohténcatl,xicohténcatl,xicotencatl",
-    label: "Tlaxcala",
-  },
-  { value: "veracruz", label: "Veracruz" },
-  { value: "yucatán,yucatan,mérida,merida", label: "Yucatán" },
-  { value: "zacatecas", label: "Zacatecas" },
-];
-
-const PARAM_FECHA = "fecha";
-const PARAM_TERRITORIO = "territorio";
-const SEGUNDOS_DE_UN_DIA = 86399;
+const PARAM_DATE = "date";
+const PARAM_COUNTRY = "country";
+const PARAM_TERRITORY = "territory";
+// Pre-translation param names, kept working so already-shared URLs don't break
+const LEGACY_PARAM_DATE = "fecha";
+const LEGACY_PARAM_TERRITORY = "territorio";
+const END_OF_DAY_SECONDS = 86399;
 
 const API_KEY =
   import.meta.env.VITE_FLICKR_API_KEY ??
   import.meta.env.REACT_APP_API_KEY ??
   "";
 
-// "2010-05-01" → Date local; null si el texto no es una fecha válida
-function parseFecha(texto) {
-  if (!texto || !/^\d{4}-\d{2}-\d{2}$/.test(texto)) return null;
-  const [año, mes, día] = texto.split("-").map(Number);
-  const fecha = new Date(año, mes - 1, día);
-  return Number.isNaN(fecha.getTime()) ? null : fecha;
+// "2010-05-01" → local Date; null if the text is not a valid date
+function parseDate(text) {
+  if (!text || !/^\d{4}-\d{2}-\d{2}$/.test(text)) return null;
+  const [year, month, day] = text.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function formatFecha(fecha) {
+function formatDate(date) {
   const pad = (n) => String(n).padStart(2, "0");
-  return `${fecha.getFullYear()}-${pad(fecha.getMonth() + 1)}-${pad(fecha.getDate())}`;
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
-function leerSeleccionInicial() {
+function findByLabel(options, label) {
+  const wanted = (label ?? "").toLowerCase();
+  return options.find((option) => option.label.toLowerCase() === wanted);
+}
+
+function readInitialSelection() {
   const params = new URLSearchParams(window.location.search);
-  const territorio = (params.get(PARAM_TERRITORIO) ?? "").toLowerCase();
+  const country =
+    findByLabel(countries, params.get(PARAM_COUNTRY)) ?? countries[0];
+  const territory =
+    findByLabel(
+      country.territories,
+      params.get(PARAM_TERRITORY) ?? params.get(LEGACY_PARAM_TERRITORY),
+    ) ?? country.territories[0];
   return {
-    fecha: parseFecha(params.get(PARAM_FECHA)),
-    zona:
-      opcionesZonas.find((o) => o.label.toLowerCase() === territorio) ??
-      opcionesZonas[0],
+    date: parseDate(params.get(PARAM_DATE) ?? params.get(LEGACY_PARAM_DATE)),
+    country,
+    territory,
   };
 }
 
 const App = () => {
-  const [fecha, setFecha] = useState(() => leerSeleccionInicial().fecha);
-  const [zona, setZona] = useState(() => leerSeleccionInicial().zona);
-  const [fotos, setFotos] = useState([]);
-  const [mensaje, setMensaje] = useState(null);
+  const [date, setDate] = useState(() => readInitialSelection().date);
+  const [country, setCountry] = useState(() => readInitialSelection().country);
+  const [territory, setTerritory] = useState(
+    () => readInitialSelection().territory,
+  );
+  const [photos, setPhotos] = useState([]);
+  const [message, setMessage] = useState(null);
 
-  // Refleja la selección en la URL para que la vista se pueda compartir con solo copiarla
+  // Mirror the selection into the URL so the view can be shared by copying it
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (fecha) {
-      params.set(PARAM_FECHA, formatFecha(fecha));
+    if (date) {
+      params.set(PARAM_DATE, formatDate(date));
     } else {
-      params.delete(PARAM_FECHA);
+      params.delete(PARAM_DATE);
     }
-    params.set(PARAM_TERRITORIO, zona.label);
+    params.set(PARAM_COUNTRY, country.label);
+    params.set(PARAM_TERRITORY, territory.label);
+    params.delete(LEGACY_PARAM_DATE);
+    params.delete(LEGACY_PARAM_TERRITORY);
     window.history.replaceState(
       null,
       "",
       `${window.location.pathname}?${params}`,
     );
-  }, [fecha, zona]);
+  }, [date, country, territory]);
 
   useEffect(() => {
-    let cancelado = false;
-    setMensaje("Obteniendo imágenes desde los servidores de Flickr...");
-    setFotos([]);
+    let cancelled = false;
+    setMessage("Fetching images from Flickr's servers...");
+    setPhotos([]);
 
     const params = new URLSearchParams({
       method: "flickr.photos.search",
       api_key: API_KEY,
-      tags: zona.value,
+      tags: territory.value,
       page: "1",
       format: "json",
       nojsoncallback: "1",
     });
-    if (fecha) {
-      const inicioDelDia = Math.floor(fecha.getTime() / 1000);
-      params.set("min_taken_date", String(inicioDelDia));
-      params.set("max_taken_date", String(inicioDelDia + SEGUNDOS_DE_UN_DIA));
+    if (date) {
+      const startOfDay = Math.floor(date.getTime() / 1000);
+      params.set("min_taken_date", String(startOfDay));
+      params.set("max_taken_date", String(startOfDay + END_OF_DAY_SECONDS));
     }
 
     fetch(`https://api.flickr.com/services/rest/?${params}`)
-      .then((respuesta) => respuesta.json())
-      .then((datos) => {
-        if (cancelado) return;
-        const encontradas = datos.photos?.photo ?? [];
-        if (encontradas.length === 0) {
-          setMensaje(
-            `No se encontraron fotos en Flickr de ${zona.label} tomadas en esta fecha. Intenta con tiempos anteriores.`,
+      .then((response) => response.json())
+      .then((data) => {
+        if (cancelled) return;
+        const found = data.photos?.photo ?? [];
+        if (found.length === 0) {
+          setMessage(
+            `No Flickr photos of ${territory.label} taken on this date were found. Try earlier times.`,
           );
         } else {
-          setMensaje(null);
-          setFotos(encontradas);
+          setMessage(null);
+          setPhotos(found);
         }
       })
       .catch(() => {
-        if (!cancelado) {
-          setMensaje(
-            "No se pudieron obtener las fotos desde Flickr. Intenta de nuevo más tarde.",
-          );
+        if (!cancelled) {
+          setMessage("Couldn't fetch photos from Flickr. Try again later.");
         }
       });
 
     return () => {
-      cancelado = true;
+      cancelled = true;
     };
-  }, [fecha, zona]);
+  }, [date, territory]);
 
   return (
     <div className="App">
@@ -147,28 +130,26 @@ const App = () => {
       <div className="sidebar-der blanco">
         <p style={{ marginTop: "0", fontSize: "1.3rem" }}>
           <b>
-            Historias se capturan a cada instante, fragmentos de eternidad
-            destinados a ser compartidos. Son únicas, inigualables,
-            irrepetibles. Tiempo y lugar se combinan para conjurar la toma
-            perfecta.
+            Stories are captured at every instant — fragments of eternity meant
+            to be shared. They are unique, incomparable, unrepeatable. Time and
+            place combine to conjure the perfect shot.
           </b>
         </p>
         <p>
-          Arqueología Flickeriana nos invita a redescubrir y encontrar
-          inspiración en fotografías casi olvidadas, alojadas en la otrora
-          popular plataforma de Flickr. A través de esta propuesta, se revelan
-          imágenes tomadas en un mismo día en cualquier rincón de México. ¿Qué
-          sucedía en los días previos a un sismo? ¿Qué político recibía
-          alabanzas mientras los más necesitados clamaban por alimento? ¿Qué
-          arte emergía mientras otro quedaba en el olvido? Este proyecto también
-          nos anima a reflexionar sobre las plataformas actuales, como
-          Instagram, cuyo enfoque prioriza el consumo y la personalización de
-          publicidad, relegando la calidad del contenido a un segundo plano. ¿Y
-          si promovemos servicios diseñados para enriquecer cada experiencia
-          humana, en lugar de moldearlas al interés comercial?
+          Arqueología Flickeriana invites us to rediscover and find inspiration
+          in nearly forgotten photographs hosted on Flickr, the once-popular
+          platform. This piece reveals images taken on the very same day in any
+          corner of the world. What was happening in the days before an
+          earthquake? Which politician was showered with praise while the
+          neediest cried out for food? What art was emerging while other art
+          faded into oblivion? This project also encourages us to reflect on
+          today's platforms, such as Instagram, whose focus prioritizes
+          consumption and ad personalization, pushing the quality of content
+          into the background. What if we promoted services designed to enrich
+          every human experience, instead of shaping it to commercial interest?
         </p>
         <p className="autor">
-          por{" "}
+          by{" "}
           <a
             style={{ color: "rgba(243, 243, 243, 0.574)" }}
             target="_blank"
@@ -177,12 +158,12 @@ const App = () => {
           >
             Óscar A. Montiel
           </a>{" "}
-          | 2021 | Seleccionado para exhibición en{" "}
+          | 2021 | Selected for exhibition at{" "}
           <a
             style={{ color: "rgba(243, 243, 243, 0.574)" }}
             href="https://cecriticc.org/tierrayterritorio/"
           >
-            Encuentro de Imagen MMXXI: tierra y territorio (Octubre 2021)
+            Encuentro de Imagen MMXXI: tierra y territorio (October 2021)
           </a>
         </p>
         <img
@@ -194,47 +175,64 @@ const App = () => {
       <div className="sidebar-izq">
         <Calendar
           className="calendario"
-          locale="es-MX"
+          locale="en-US"
           minDate={new Date(2004, 1, 10)}
           maxDate={new Date()}
-          onChange={(valor) => {
-            if (valor instanceof Date) setFecha(valor);
+          onChange={(value) => {
+            if (value instanceof Date) setDate(value);
           }}
-          value={fecha}
+          value={date}
         />
         <div>
           <Select
             className="select-custom"
-            options={opcionesZonas}
-            placeholder="Seleccionar territorio"
-            value={zona}
-            onChange={(opcion) => setZona(opcion)}
+            aria-label="Country"
+            options={countries}
+            getOptionValue={(option) => option.label}
+            placeholder="Select country"
+            value={country}
+            onChange={(option) => {
+              setCountry(option);
+              setTerritory(option.territories[0]);
+            }}
+          />
+        </div>
+        <div>
+          <Select
+            className="select-custom"
+            aria-label="Territory"
+            options={country.territories}
+            placeholder="Select territory"
+            value={territory}
+            onChange={(option) => setTerritory(option)}
           />
         </div>
         <div>
           <p className="blanco" style={{ marginBottom: ".5rem" }}>
-            Territorio actual:
+            Current territory:
           </p>
-          <p className="texto-zona blanco">{zona.label}</p>
+          <p className="texto-zona blanco">{territory.label}</p>
         </div>
       </div>
       <div className="photo-timeline blanco">
-        {mensaje}
-        {fotos.map((foto) => (
-          <div key={foto.id} className="photo-timeline-item fade-in">
+        {message}
+        {photos.map((photo) => (
+          <div key={photo.id} className="photo-timeline-item fade-in">
             <a
-              href={`https://www.flickr.com/photos/${foto.owner}/${foto.id}`}
+              href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`}
               target="_blank"
               rel="noreferrer"
             >
               <img
                 className="photo-timeline-img"
-                alt={foto.title}
-                src={`https://live.staticflickr.com/${foto.server}/${foto.id}_${foto.secret}.jpg`}
+                alt={photo.title}
+                src={`https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
               />
             </a>
             <div className="info-foto-contenedor">
-              <small className="photo-timeline-title">{foto.title || ""}</small>
+              <small className="photo-timeline-title">
+                {photo.title || ""}
+              </small>
             </div>
           </div>
         ))}

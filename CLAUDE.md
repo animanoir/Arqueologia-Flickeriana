@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Arqueología Flickeriana is an art project (exhibited at Encuentro de Imagen MMXXI) that lets visitors pick a date and a Mexican state/region and browse Flickr photos taken that day in that place. All user-facing text is in Spanish — keep it that way. Deployed on Vercel at arqueologia-flickeriana.vercel.app.
+Arqueología Flickeriana is an art project (exhibited at Encuentro de Imagen MMXXI) that lets visitors pick a date, a country, and a state/territory, then browse Flickr photos taken that day in that place. The UI is in English (translated from the original Spanish in 2026); the project name and the exhibition name stay in Spanish. Deployed on Vercel at arqueologia-flickeriana.vercel.app.
 
 ## Commands
 
@@ -19,10 +19,11 @@ Vite + React 19, managed with npm (single `package-lock.json`).
 
 ## Architecture
 
-The entire application lives in [src/App.jsx](src/App.jsx) — one function component, no routing, no state library. Entry point is [src/main.jsx](src/main.jsx), which also unregisters the service worker that old CRA-era deploys installed in visitors' browsers (do not reintroduce a service worker without handling this).
+The application is one function component in [src/App.jsx](src/App.jsx) plus a data module, no routing, no state library. Entry point is [src/main.jsx](src/main.jsx), which also unregisters the service worker that old CRA-era deploys installed in visitors' browsers (do not reintroduce a service worker without handling this).
 
-- **Flickr API**: a `useEffect` keyed on `fecha` and `zona` calls `flickr.photos.search`. The API key is read from `VITE_FLICKR_API_KEY`, with the legacy name `REACT_APP_API_KEY` still accepted (see `envPrefix` in [vite.config.js](vite.config.js)) because that's the variable name configured in Vercel. Locally it lives in `.env` (untracked; see `.env.example`). Photo image URLs are built as `https://live.staticflickr.com/{server}/{id}_{secret}.jpg`.
-- **URL sharing**: the selected date and territory are mirrored into query params (`?fecha=YYYY-MM-DD&territorio=<label>`) via `history.replaceState`, and read back on mount, so any app URL is shareable. `territorio` is matched against option labels case-insensitively; invalid params fall back to defaults (Querétaro, no date filter).
+- **Search is deliberately tag-based, not geo-based.** The author explicitly prefers matching how Flickr users tagged their own photos. Testing in July 2026 showed tag search finds 7–22× more photos than bbox geo search, `flickr.places.find` returns empty for every query, and `woe_id` search errors — do not migrate to Flickr geo search.
+- **Territory data**: [src/territories.js](src/territories.js) exports `countries` — Mexico (the original hand-curated list, first = default), France, Germany, Japan, UK, US. Each territory maps a label to a comma-separated Flickr tag list following the curation model: territory name + local-language/native-script variants (kanji for Japan, umlauts for Germany) + most-photographed cities. Each country's first territory is its default; the rest are alphabetical.
+- **Flickr API**: a `useEffect` keyed on `date` and `territory` calls `flickr.photos.search`. The API key is read from `VITE_FLICKR_API_KEY`, with the legacy name `REACT_APP_API_KEY` still accepted (see `envPrefix` in [vite.config.js](vite.config.js)) because that's the variable name configured in Vercel. Locally it lives in `.env` (untracked; see `.env.example`). Photo image URLs are built as `https://live.staticflickr.com/{server}/{id}_{secret}.jpg`.
+- **URL sharing**: selection is mirrored into query params (`?date=YYYY-MM-DD&country=<label>&territory=<label>`) via `history.replaceState` and read back on mount. The pre-translation Spanish params (`fecha`, `territorio`) are still read as fallbacks, then rewritten to the English names. Labels match case-insensitively; invalid params fall back to defaults (Querétaro, Mexico, no date filter).
 - **Dates**: no `min/max_taken_date` filter is sent until a date is chosen (the landing page shows recent photos). A chosen date becomes a Unix-timestamp range covering that local day (start + 86399s). Calendar range is Feb 2004 (Flickr's launch) to today.
-- **Regions**: `opcionesZonas` at the top of App.jsx maps display labels to comma-separated Flickr tag lists; `URLSearchParams` handles all encoding, so values are stored as plain text.
-- **Tests**: Vitest + jsdom + Testing Library, config in the `test` key of [vite.config.js](vite.config.js) (`globals: true`). Tests stub `fetch` and drive the real Calendar/Select components; [src/App.test.jsx](src/App.test.jsx) covers the URL-sharing round trip.
+- **Tests**: Vitest + jsdom + Testing Library, config in the `test` key of [vite.config.js](vite.config.js) (`globals: true`). Tests stub `fetch` and drive the real Calendar/Select components (the two react-select inputs are found by their `aria-label`s, "Country" and "Territory"); [src/App.test.jsx](src/App.test.jsx) covers the URL-sharing round trip including legacy-param URLs.

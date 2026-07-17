@@ -1,25 +1,25 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 
-const respuestaFlickr = (fotos) =>
+const flickrResponse = (photos) =>
   Promise.resolve({
-    json: () => Promise.resolve({ photos: { photo: fotos } }),
+    json: () => Promise.resolve({ photos: { photo: photos } }),
   });
 
-const fotoDeMuestra = {
+const samplePhoto = {
   id: "1234",
   owner: "99@N00",
   secret: "abcd",
   server: "65535",
   farm: 66,
-  title: "Foto de prueba",
+  title: "Sample photo",
 };
 
 beforeEach(() => {
   window.history.replaceState(null, "", "/");
   vi.stubGlobal(
     "fetch",
-    vi.fn(() => respuestaFlickr([])),
+    vi.fn(() => flickrResponse([])),
   );
 });
 
@@ -27,91 +27,122 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-const urlDeBusqueda = () => new URL(fetch.mock.calls.at(-1)[0]);
+const searchUrl = () => new URL(fetch.mock.calls.at(-1)[0]);
+const currentTerritory = (label) =>
+  screen.getByText(label, { selector: ".texto-zona" });
 
-it("renderiza con Querétaro como territorio por defecto", async () => {
+it("renders with Querétaro, Mexico as the default", async () => {
   render(<App />);
-  expect(screen.getByText("Territorio actual:")).toBeInTheDocument();
-  expect(
-    screen.getByText("Querétaro", { selector: ".texto-zona" }),
-  ).toBeInTheDocument();
+  expect(screen.getByText("Current territory:")).toBeInTheDocument();
+  expect(currentTerritory("Querétaro")).toBeInTheDocument();
   await waitFor(() => expect(fetch).toHaveBeenCalled());
-  const params = urlDeBusqueda().searchParams;
+  const params = searchUrl().searchParams;
   expect(params.get("tags")).toBe("querétaro,queretaro");
-  // Sin fecha elegida no se filtra por día
+  // No day filter until a date is picked
   expect(params.get("min_taken_date")).toBeNull();
 });
 
-it("lee fecha y territorio desde la URL compartida", async () => {
-  window.history.replaceState(null, "", "/?fecha=2010-05-01&territorio=Oaxaca");
-  render(<App />);
-  expect(
-    screen.getByText("Oaxaca", { selector: ".texto-zona" }),
-  ).toBeInTheDocument();
-  await waitFor(() => expect(fetch).toHaveBeenCalled());
-  const params = urlDeBusqueda().searchParams;
-  const inicioDelDia = new Date(2010, 4, 1).getTime() / 1000;
-  expect(params.get("tags")).toBe("oaxaca");
-  expect(params.get("min_taken_date")).toBe(String(inicioDelDia));
-  expect(params.get("max_taken_date")).toBe(String(inicioDelDia + 86399));
-});
-
-it("ignora parámetros inválidos sin romperse", async () => {
+it("reads date, country, and territory from a shared URL", async () => {
   window.history.replaceState(
     null,
     "",
-    "/?fecha=no-es-fecha&territorio=Atlantis",
+    "/?date=2010-05-01&country=Japan&territory=Kyoto",
   );
   render(<App />);
-  expect(
-    screen.getByText("Querétaro", { selector: ".texto-zona" }),
-  ).toBeInTheDocument();
+  expect(currentTerritory("Kyoto")).toBeInTheDocument();
   await waitFor(() => expect(fetch).toHaveBeenCalled());
-  expect(urlDeBusqueda().searchParams.get("min_taken_date")).toBeNull();
+  const params = searchUrl().searchParams;
+  const startOfDay = new Date(2010, 4, 1).getTime() / 1000;
+  expect(params.get("tags")).toBe("kyoto,京都");
+  expect(params.get("min_taken_date")).toBe(String(startOfDay));
+  expect(params.get("max_taken_date")).toBe(String(startOfDay + 86399));
 });
 
-it("actualiza la URL al elegir otro territorio", async () => {
+it("still understands legacy Spanish URLs (fecha/territorio)", async () => {
+  window.history.replaceState(null, "", "/?fecha=2010-05-01&territorio=Oaxaca");
   render(<App />);
-  fireEvent.keyDown(screen.getByRole("combobox"), { key: "ArrowDown" });
-  fireEvent.click(screen.getByText("Sinaloa"));
+  expect(currentTerritory("Oaxaca")).toBeInTheDocument();
+  await waitFor(() => expect(fetch).toHaveBeenCalled());
+  expect(searchUrl().searchParams.get("min_taken_date")).not.toBeNull();
+  // The URL gets rewritten to the new English params
+  await waitFor(() => {
+    expect(window.location.search).toContain("territory=Oaxaca");
+    expect(window.location.search).not.toContain("territorio=");
+  });
+});
+
+it("ignores invalid params without breaking", async () => {
+  window.history.replaceState(
+    null,
+    "",
+    "/?date=not-a-date&country=Atlantis&territory=Nowhere",
+  );
+  render(<App />);
+  expect(currentTerritory("Querétaro")).toBeInTheDocument();
+  await waitFor(() => expect(fetch).toHaveBeenCalled());
+  expect(searchUrl().searchParams.get("min_taken_date")).toBeNull();
+});
+
+it("switching country resets the territory and updates the URL", async () => {
+  render(<App />);
+  fireEvent.keyDown(screen.getByRole("combobox", { name: "Country" }), {
+    key: "ArrowDown",
+  });
+  fireEvent.click(screen.getByText("United States"));
+  expect(currentTerritory("New York")).toBeInTheDocument();
+  await waitFor(() => {
+    expect(window.location.search).toContain("country=United+States");
+    expect(window.location.search).toContain("territory=New+York");
+  });
   await waitFor(() =>
-    expect(window.location.search).toContain(
-      `territorio=${encodeURIComponent("Sinaloa")}`,
+    expect(searchUrl().searchParams.get("tags")).toBe(
+      "newyork,newyorkcity,nyc,brooklyn",
     ),
   );
+});
+
+it("updates the URL when picking a territory", async () => {
+  render(<App />);
+  fireEvent.keyDown(screen.getByRole("combobox", { name: "Territory" }), {
+    key: "ArrowDown",
+  });
+  fireEvent.click(screen.getByText("Sinaloa"));
   await waitFor(() =>
-    expect(urlDeBusqueda().searchParams.get("tags")).toBe(
+    expect(window.location.search).toContain("territory=Sinaloa"),
+  );
+  await waitFor(() =>
+    expect(searchUrl().searchParams.get("tags")).toBe(
       "sinaloa,culiacán,culiacan",
     ),
   );
 });
 
-it("actualiza la URL al elegir una fecha en el calendario", async () => {
+it("updates the URL when picking a date in the calendar", async () => {
   render(<App />);
-  // Va al mes anterior para que el día 15 nunca caiga en el futuro (maxDate)
+  // Go to the previous month so day 15 can never fall in the future (maxDate)
   fireEvent.click(screen.getByText("‹"));
   fireEvent.click(screen.getByText("15"));
-  const hoy = new Date();
-  const esperada = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 15);
+  const today = new Date();
+  const expected = new Date(today.getFullYear(), today.getMonth() - 1, 15);
   const pad = (n) => String(n).padStart(2, "0");
-  const fechaEsperada = `${esperada.getFullYear()}-${pad(esperada.getMonth() + 1)}-${pad(esperada.getDate())}`;
+  const expectedDate = `${expected.getFullYear()}-${pad(expected.getMonth() + 1)}-${pad(expected.getDate())}`;
   await waitFor(() =>
-    expect(window.location.search).toContain(`fecha=${fechaEsperada}`),
+    expect(window.location.search).toContain(`date=${expectedDate}`),
   );
 });
 
-it("muestra las fotos que regresa Flickr", async () => {
+it("shows the photos Flickr returns", async () => {
   vi.stubGlobal(
     "fetch",
-    vi.fn(() => respuestaFlickr([fotoDeMuestra])),
+    vi.fn(() => flickrResponse([samplePhoto])),
   );
   render(<App />);
-  const imagen = await screen.findByAltText("Foto de prueba");
-  expect(imagen).toHaveAttribute(
+  const image = await screen.findByAltText("Sample photo");
+  expect(image).toHaveAttribute(
     "src",
     "https://live.staticflickr.com/65535/1234_abcd.jpg",
   );
-  expect(imagen.closest("a")).toHaveAttribute(
+  expect(image.closest("a")).toHaveAttribute(
     "href",
     "https://www.flickr.com/photos/99@N00/1234",
   );

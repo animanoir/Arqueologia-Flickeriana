@@ -94,6 +94,10 @@ body {
   color: rgb(243, 243, 243);
 }
 
+.select-custom {
+  margin-top: 0.5rem;
+}
+
 #edm-logo {
   width: 100%;
 }
