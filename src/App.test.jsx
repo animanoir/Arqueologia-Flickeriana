@@ -37,7 +37,9 @@ it("renders with Querétaro, Mexico as the default", async () => {
   expect(currentTerritory("Querétaro")).toBeInTheDocument();
   await waitFor(() => expect(fetch).toHaveBeenCalled());
   const params = searchUrl().searchParams;
-  expect(params.get("tags")).toBe("querétaro,queretaro");
+  expect(params.get("tags")).toBe(
+    "querétaro,queretaro,santiagodequerétaro,santiagodequeretaro,qro",
+  );
   expect(params.get("per_page")).toBe("30");
   // No day filter until a date is picked
   expect(params.get("min_taken_date")).toBeNull();
@@ -54,7 +56,9 @@ it("reads date, country, and territory from a shared URL", async () => {
   await waitFor(() => expect(fetch).toHaveBeenCalled());
   const params = searchUrl().searchParams;
   const startOfDay = new Date(2010, 4, 1).getTime() / 1000;
-  expect(params.get("tags")).toBe("kyoto,京都");
+  expect(params.get("tags")).toBe(
+    "kyoto,kioto,京都,京都府,gion,祇園,arashiyama,嵐山,fushimiinari,伏見稲荷,kinkakuji,金閣寺",
+  );
   expect(params.get("min_taken_date")).toBe(String(startOfDay));
   expect(params.get("max_taken_date")).toBe(String(startOfDay + 86399));
 });
@@ -97,7 +101,7 @@ it("switching country resets the territory and updates the URL", async () => {
   });
   await waitFor(() =>
     expect(searchUrl().searchParams.get("tags")).toBe(
-      "newyork,newyorkcity,nyc,brooklyn",
+      "newyork,newyorkcity,nyc,ny,brooklyn,manhattan,queens,bronx,harlem,statenisland,longisland",
     ),
   );
 });
@@ -113,7 +117,7 @@ it("updates the URL when picking a territory", async () => {
   );
   await waitFor(() =>
     expect(searchUrl().searchParams.get("tags")).toBe(
-      "sinaloa,culiacán,culiacan",
+      "sinaloa,culiacán,culiacan,mazatlán,mazatlan,losmochis",
     ),
   );
 });
