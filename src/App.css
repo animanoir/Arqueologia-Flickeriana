@@ -92,8 +92,14 @@ body {
   color: rgb(243, 243, 243);
 }
 
+.select-label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
 .select-custom {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .load-more {

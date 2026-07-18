@@ -210,9 +210,12 @@ const App = () => {
           value={date}
         />
         <div>
+          <label className="select-label blanco" htmlFor="country-select">
+            Country
+          </label>
           <Select
             className="select-custom"
-            aria-label="Country"
+            inputId="country-select"
             options={countries}
             getOptionValue={(option) => option.label}
             placeholder="Select country"
@@ -224,9 +227,12 @@ const App = () => {
           />
         </div>
         <div>
+          <label className="select-label blanco" htmlFor="territory-select">
+            Territory
+          </label>
           <Select
             className="select-custom"
-            aria-label="Territory"
+            inputId="territory-select"
             options={country.territories}
             placeholder="Select territory"
             value={territory}
